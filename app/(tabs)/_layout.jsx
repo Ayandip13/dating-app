@@ -1,9 +1,21 @@
 import { Tabs } from "expo-router";
-import { Feather } from "@expo/vector-icons";
+import { Feather, Ionicons } from "@expo/vector-icons";
 
 export default function Layout() {
   return (
-    <Tabs>
+    <Tabs
+      screenOptions={{
+        tabBarStyle: {
+          height: 60, //less height
+          paddingBottom: 9, // ekdom bottom e thakar jonno
+          backgroundColor: "#fff",
+          // borderTopWidth: 1,
+          borderTopColor: "#ddd",
+          elevation: 0.2, // Android elevation remove
+          shadowOpacity: 0, // iOS shadow remove
+        },
+      }}
+    >
       <Tabs.Screen
         name="profile"
         options={{
@@ -17,8 +29,40 @@ export default function Layout() {
             ),
         }}
       />
-      <Tabs.Screen name="chat" />
-      <Tabs.Screen name="bio" />
+      <Tabs.Screen
+        name="chat"
+        options={{
+          title: "Chat",
+          headerShown: false,
+          tabBarIcon: ({ focused }) =>
+            focused ? (
+              <Ionicons
+                name="chatbubble-ellipses-outline"
+                color="black"
+                size={24}
+              />
+            ) : (
+              <Ionicons
+                name="chatbox-ellipses-outline"
+                color="gray"
+                size={24}
+              />
+            ),
+        }}
+      />
+      <Tabs.Screen
+        name="bio"
+        options={{
+          title: "Account",
+          headerShown: false,
+          tabBarIcon: ({ focused }) =>
+            focused ? (
+              <Ionicons name="man-outline" color="black" size={24} />
+            ) : (
+              <Ionicons name="man-outline" color="gray" size={24} />
+            ),
+        }}
+      />
     </Tabs>
   );
 }
