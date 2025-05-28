@@ -5,7 +5,7 @@ import { StatusBar } from "expo-status-bar";
 
 const index = () => {
   return (
-      <Redirect href="/(tabs)/profile" />
+      <Redirect href="/(authenticate)/login" />
   );
 };
 
