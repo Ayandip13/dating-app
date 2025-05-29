@@ -7,12 +7,15 @@ import {
   SafeAreaView,
   KeyboardAvoidingView,
   TouchableOpacity,
+  Platform,
   Pressable,
+  Alert,
 } from "react-native";
 import React, { useState } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
+import axios from "axios";
 
 const Register = () => {
   const router = useRouter();
@@ -20,6 +23,53 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [secure, setSecure] = useState(false);
+
+  const handleRegister = () => {
+    const user = {
+      name,
+      email,
+      password,
+    };
+
+    axios
+      .post("http://192.168.0.103:3000/register", user)
+      .then((resp) => {
+        console.log(resp);
+        Alert.alert(
+          "Registration successfull",
+          "You have been registered successfully",
+          [
+            {
+              text: "Cancel",
+              onPress: () => console.log("Cancel Pressed"),
+              style: "cancel",
+            },
+            { text: "OK", onPress: () => console.log("OK Pressed") },
+          ]
+        );
+        setEmail("");
+        setName("");
+        setPassword("");
+      })
+      .catch((error) => {
+        if (error.response) {
+          // Server responded with error (like 400, 409 etc.)
+          console.log("Error Response:", error.response.data);
+          Alert.alert(
+            "Registration Failed",
+            error.response.data.message || "Something went wrong"
+          );
+        } else if (error.request) {
+          // Request made but no response
+          console.log("No Response:", error.request);
+          Alert.alert("Server Error", "No response from server");
+        } else {
+          // Something else
+          console.log("Error Message:", error.message);
+          Alert.alert("Error", error.message);
+        }
+      });
+  };
 
   return (
     <SafeAreaView
@@ -51,7 +101,10 @@ const Register = () => {
         </Text>
       </View>
 
-      <KeyboardAvoidingView>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={{ flex: 1 }}
+      >
         <View style={{ alignItems: "center" }}>
           <Text
             style={{
@@ -78,7 +131,30 @@ const Register = () => {
             style={{ width: 100, height: 100, resizeMode: "cover" }}
           />
         </View>
-        <View style={{ marginTop: 20 }}>
+
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            gap: 5,
+            backgroundColor: "#FFC0CB",
+            paddingVertical: 5,
+            borderRadius: 5,
+            marginTop: 15,
+            paddingHorizontal: 10,
+          }}
+        >
+          <MaterialIcons name="person" size={24} color="black" />
+          <TextInput
+            style={{ color: "#000", marginVertical: 5, width: 300 }}
+            value={name}
+            onChangeText={(e) => setName(e)}
+            placeholder="Enter your name"
+            placeholderTextColor={"#7F8CAA"}
+          />
+        </View>
+
+        <View style={{ marginTop: 5 }}>
           <View
             style={{
               flexDirection: "row",
@@ -87,20 +163,21 @@ const Register = () => {
               backgroundColor: "#FFC0CB",
               paddingVertical: 5,
               borderRadius: 5,
-              marginTop: 30,
+              marginTop: 20,
               paddingHorizontal: 10,
             }}
           >
             <MaterialIcons name="email" size={24} color="black" />
             <TextInput
-              style={{ color: "#000", marginVertical: 10, width: 300 }}
+              style={{ color: "#000", marginVertical: 5, width: 300 }}
               value={email}
               onChangeText={(e) => setEmail(e)}
               placeholder="Enter your email"
               placeholderTextColor={"#7F8CAA"}
             />
           </View>
-          <View style={{ marginTop: 10 }}>
+
+          <View style={{ marginTop: 5 }}>
             <View
               style={{
                 flexDirection: "row",
@@ -109,7 +186,7 @@ const Register = () => {
                 backgroundColor: "#FFC0CB",
                 paddingVertical: 5,
                 borderRadius: 5,
-                marginTop: 30,
+                marginTop: 20,
                 paddingHorizontal: 10,
               }}
             >
@@ -122,36 +199,18 @@ const Register = () => {
               <TextInput
                 value={password}
                 onChangeText={(e) => setPassword(e)}
-                style={{ color: "#000", marginVertical: 10, width: 300 }}
+                style={{ color: "#000", marginVertical: 5, width: 300 }}
                 placeholder="Enter your password"
                 secureTextEntry={!secure}
                 placeholderTextColor={"#7F8CAA"}
               />
             </View>
           </View>
-          <View
-            style={{
-              marginTop: 12,
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-between",
-            }}
-          >
-            <Text>Keep me logged in</Text>
-            <Text
-              style={{
-                color: "#007FFF",
-                fontWeight: "500",
-                textDecorationLine: "underline",
-              }}
-            >
-              Forgot Password
-            </Text>
-          </View>
 
           <View style={{ marginTop: 50 }} />
 
           <TouchableOpacity
+            onPress={handleRegister}
             style={{
               width: 200,
               backgroundColor: "#FFB8E0",

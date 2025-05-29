@@ -7,6 +7,7 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
+  Platform,
   View,
 } from "react-native";
 import React, { useState } from "react";
@@ -51,7 +52,10 @@ const Login = () => {
         </Text>
       </View>
 
-      <KeyboardAvoidingView>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={{ flex: 1 }}
+      >
         <View style={{ alignItems: "center" }}>
           <Text
             style={{
@@ -93,14 +97,14 @@ const Login = () => {
           >
             <MaterialIcons name="email" size={24} color="black" />
             <TextInput
-              style={{ color: "#000", marginVertical: 10, width: 300 }}
+              style={{ color: "#000", marginVertical: 5, width: 300 }}
               value={email}
               onChangeText={(e) => setEmail(e)}
               placeholder="Enter your email"
               placeholderTextColor={"#7F8CAA"}
             />
           </View>
-          <View style={{ marginTop: 10 }}>
+          <View style={{ marginTop: 5 }}>
             <View
               style={{
                 flexDirection: "row",
@@ -109,7 +113,7 @@ const Login = () => {
                 backgroundColor: "#FFC0CB",
                 paddingVertical: 5,
                 borderRadius: 5,
-                marginTop: 30,
+                marginTop: 20,
                 paddingHorizontal: 10,
               }}
             >
@@ -122,7 +126,7 @@ const Login = () => {
               <TextInput
                 value={password}
                 onChangeText={(e) => setPassword(e)}
-                style={{ color: "#000", marginVertical: 10, width: 300 }}
+                style={{ color: "#000", marginVertical: 5, width: 300 }}
                 placeholder="Enter your password"
                 secureTextEntry={!secure}
                 placeholderTextColor={"#7F8CAA"}
@@ -171,8 +175,13 @@ const Login = () => {
             </Text>
           </TouchableOpacity>
 
-          <Pressable onPress={()=>router.replace('/register')} style={{ marginTop: 18 }}>
-            <Text style={{ textAlign: "center", color: "#7F8CAA", fontSize:17 }}>
+          <Pressable
+            onPress={() => router.replace("/register")}
+            style={{ marginTop: 18 }}
+          >
+            <Text
+              style={{ textAlign: "center", color: "#7F8CAA", fontSize: 17 }}
+            >
               Don't have an account? Sign Up
             </Text>
           </Pressable>
