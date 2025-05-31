@@ -22,9 +22,6 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    varificationToken: {
-      type: String,
-    },
     crushes: [
       {
         type: mongoose.Schema.Types.ObjectId,
